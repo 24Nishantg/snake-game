@@ -7,7 +7,9 @@ const logo = document.getElementById('logo');
 const score = document.getElementById('score');
 const highScoreText = document.getElementById('highscore');
 
-// console.log(board);
+// // console.log(board);
+
+
 
 // define game variable
 const gridSize = 20;
@@ -60,12 +62,12 @@ function setPosition(element, position) {
 
 // draw food function
 function drawFood() {
-    if(gameStarted){
+    if (gameStarted) {
         const foodElement = createGameElement('div', 'food');
         setPosition(foodElement, food);
         board.appendChild(foodElement);
     }
-    
+
 }
 
 // generate food
@@ -149,52 +151,25 @@ function handleKeyPress(event) {
             case 'ArrowLeft':
                 direction = 'left'
                 break;
-            
+
         }
     }
 }
 document.addEventListener('keydown', handleKeyPress);
 
 function increaseSpeed() {
-    if(gameSpeedDelay > 150){
+    if (gameSpeedDelay > 300) {
+        gameSpeedDelay -= 20;
+    } else if (gameSpeedDelay > 200) {
+        gameSpeedDelay -= 10;
+    } else if (gameSpeedDelay > 100) {
         gameSpeedDelay -= 5;
-    }else if(gameSpeedDelay > 100){
-        gameSpeedDelay -= 4;
-    }else if(gameSpeedDelay > 50){
-        gameSpeedDelay -= 3;  
-    }else if(gameSpeedDelay > 25){
+    } else if (gameSpeedDelay > 50) {
         gameSpeedDelay -= 2;
     }
 }
 
-// function checkCollision() {
-//     const head = snake[0];
 
-//     if(head.x < 1 || head.x > gridSize || head.y < 1 || head.y > gridSize){
-//         resetGame();
-//     }
-//     else{
-//         for(let i = 1; i< snake.length; i++){
-//             if(head.x === snake[i].x && head.y === snake[i].y) {
-//                 resetGame();
-//                 // break;
-//             }
-//         }
-//     } 
-// }
-// function checkCollision() {
-//     const head = snake[0];
-  
-//     if (head.x < 1 || head.x > gridSize || head.y < 1 || head.y > gridSize) {
-//       resetGame();
-//     }
-  
-//     for (let i = 1; i < snake.length; i++) {
-//       if (head.x === snake[i].x && head.y === snake[i].y) {
-//         resetGame();
-//       }
-//     }
-//   }
 
 function checkCollision() {
     const head = snake[0];
@@ -215,7 +190,7 @@ function checkCollision() {
 function resetGame() {
     updateHighScore();
     stopGame();
-    snake = [{ x: 10, y: 10}];
+    snake = [{ x: 10, y: 10 }];
     food = generateFood();
     direction = 'right';
     gameSpeedDelay = 200;
@@ -224,7 +199,7 @@ function resetGame() {
 
 function updateScore() {
     const currentScore = snake.length - 1;
-    score.textContent = currentScore.toString().padStart(3,'0');
+    score.textContent = currentScore.toString().padStart(3, '0');
 }
 
 function stopGame() {
@@ -236,21 +211,21 @@ function stopGame() {
 function updateHighScore() {
     const currentScore = snake.length - 1;
     if (currentScore > highScore) {
-      highScore = currentScore;
-      highScoreText.textContent = highScore.toString().padStart(3, '0');
+        highScore = currentScore;
+        highScoreText.textContent = highScore.toString().padStart(3, '0');
     }
     highScoreText.style.display = 'block';
-  }
+}
 
 
 
-  document.addEventListener('touchstart', handleTouchStart);
-  document.addEventListener('touchmove', handleTouchMove);
+document.addEventListener('touchstart', handleTouchStart);
+document.addEventListener('touchmove', handleTouchMove);
 
-  
 
-  let touchStartX;
-  let touchStartY;
+
+let touchStartX;
+let touchStartY;
 
 
 
@@ -343,3 +318,48 @@ function startGame() {
 //     checkCollision();
 //     draw();
 // }, gameSpeedDelay);
+
+
+
+
+
+
+const difficultySelect = document.getElementById('difficulty');
+let difficulty = 'medium'; // Default difficulty
+
+// ... (existing code)
+
+// Function to set the game speed based on difficulty
+function setGameSpeed() {
+    switch (difficulty) {
+        case 'easy':
+            gameSpeedDelay = 300;
+            break;
+        case 'medium':
+            gameSpeedDelay = 200;
+            break;
+        case 'hard':
+            gameSpeedDelay = 100;
+            break;
+        // Add more cases for additional difficulty levels if needed
+    }
+}
+
+// Event listener for difficulty change
+difficultySelect.addEventListener('change', (event) => {
+    difficulty = event.target.value;
+    setGameSpeed();
+});
+
+// Modify the existing increaseSpeed function
+function increaseSpeed() {
+    // Your existing speed increase logic
+
+    // Add this line to update the game speed based on difficulty
+    setGameSpeed();
+}
+
+// ... (existing code)
+
+// Call setGameSpeed initially to set the default speed
+setGameSpeed();
